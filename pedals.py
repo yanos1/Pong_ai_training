@@ -1,5 +1,5 @@
 WHITE = (255,255,255)
-PEDAL_SPEED = 10
+PEDAL_SPEED = 50
 
 
 class Paddle:

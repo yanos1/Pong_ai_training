@@ -26,7 +26,7 @@ left_paddle_x = WIDTH - 15 - PADDLE_WIDTH
 left_paddle_y = (HEIGHT / 2) - PADDLE_HEIGHT / 2
 petal_2_pos = (HEIGHT / 2) - PADDLE_HEIGHT / 2
 BACKGROUND_COLOR = (0, 100, 140)
-Y_AXIS_CHANGE = 0.09
+Y_AXIS_CHANGE = 0.06
 MAX_POINTS = 10
 ########################
 
@@ -106,16 +106,17 @@ class Game:
         return True
 
     def ball_peddle_collision(self):
-        if self.right_paddle.x <= self.ball.x + (
+        if self.right_paddle.x +1== self.ball.x + (
                 BALL_SIZE // 2) <= self.right_paddle.x + PADDLE_WIDTH:
             if self.right_paddle.y <= self.ball.y <= self.right_paddle.y + PADDLE_HEIGHT - 1:  # ball touches paddle
                 self.handle_paddle_collision(self.right_paddle)
-                self.right_hits+=1
-        elif self.left_paddle.x + PADDLE_WIDTH >= self.ball.x - (
+                return "right"
+
+        elif self.left_paddle.x + PADDLE_WIDTH ==1+self.ball.x - (
                 BALL_SIZE // 2):
             if self.left_paddle.y <= self.ball.y <= self.left_paddle.y + PADDLE_HEIGHT - 1:
                 self.handle_paddle_collision(self.left_paddle)
-                self.left_hits+=1
+                return "left"
 
     def handle_paddle_collision(self, paddle):
         middle = (paddle.y + paddle.y + PADDLE_HEIGHT) // 2
@@ -146,16 +147,21 @@ class Game:
             self.game_over = True
 
     def render_game(self):
-        self.move_paddle()
+        # self.move_paddle()
         self.ball.move_ball()
-        self.ball_peddle_collision()
+        hit = self.ball_peddle_collision()
+        if hit == "left":
+            self.left_hits +=1
+        elif hit == "right":
+            self.right_hits+=1
+
         self.ball_wall_collision()
         game_info = GameInformation(
             self.left_hits, self.right_hits, self.left_score, self.right_score)
         return game_info
 
     def start_new_round(self):
-        self.ball.y_speed = random.uniform(-3.5,3.5)
+        self.ball.y_speed = random.uniform(-2.2,2.2)
         self.ball.x_speed *= -1
         self.ball.x = self.ball.starting_x
         self.ball.y = self.ball.starting_y
@@ -176,6 +182,7 @@ class Game:
         self.start_new_round()
         self.right_score = 0
         self.left_score = 0
+        self.left_hits = self.right_hits = 0
 
 
 # def main():

@@ -26,7 +26,7 @@ left_paddle_x = WIDTH - 15 - PADDLE_WIDTH
 left_paddle_y = (HEIGHT / 2) - PADDLE_HEIGHT / 2
 petal_2_pos = (HEIGHT / 2) - PADDLE_HEIGHT / 2
 BACKGROUND_COLOR = (0, 100, 140)
-Y_AXIS_CHANGE = 0.06
+Y_AXIS_CHANGE = 0.15
 MAX_POINTS = 10
 ########################
 

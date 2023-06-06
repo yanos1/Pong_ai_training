@@ -3,7 +3,8 @@ import neat
 import os
 from trainAI import play_ai
 from pong import WIDTH, HEIGHT, WHITE
-from display import Display, easy_mode_button_image, hard_mode_button_image, impossible_mode_button_image, BG_IMAGE
+from display import Display, easy_mode_button_image, hard_mode_button_image, impossible_mode_button_image, BG_IMAGE, TITLE_IMAGE,BALL_IMAGE
+from ball import Ball
 
 EASY = "easy"
 HARD = "hard"
@@ -35,11 +36,18 @@ def valid_mouse_click(button_pos, mouse_pos):
 def start_game():
     run = True
     start_display = Display(WIDTH, HEIGHT, WHITE)
+    start_ball = Ball(WIDTH//2,HEIGHT//2)
+    clock = pygame.time.Clock()
     while run:
+        clock.tick(60)
         start_display.draw_screen(start_display.screen, BG_IMAGE)
-        start_display.draw_title(start_display.screen, "title_image.png")
+        start_display.draw_title(start_display.screen, TITLE_IMAGE)
         start_display.draw_buttons(start_display.screen, easy_mode_button_image, hard_mode_button_image,
                                    impossible_mode_button_image)
+        start_ball.draw_ball(start_display.screen,BALL_IMAGE)
+        start_ball.move_ball()
+        start_display.start_menu_ball_animation(start_ball)
+
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -53,8 +61,8 @@ def start_game():
                 elif valid_mouse_click(start_display.impossible_but_loc, mouse_pos):
                     return IMPOSSIBLE
 
-            # Quit the game
-            pygame.quit()
+    # Quit the game
+    pygame.quit()
 
 
 def play_game():

@@ -6,8 +6,6 @@ from pedals import Paddle
 
 pygame.init()
 
-
-
 #  game settings ##
 WIDTH = 830
 HEIGHT = 550
@@ -23,15 +21,14 @@ petal_2_pos = (HEIGHT / 2) - PADDLE_HEIGHT / 2
 BACKGROUND_COLOR = (0, 100, 140)
 Y_AXIS_CHANGE = 0.07
 MAX_POINTS = 7
-WHITE = (255,255,255)
-
+WHITE = (255, 255, 255)
 
 EASY = "easy"
 HARD = "hard"
 IMPOSSIBLE = "impossible"
 
-########################
 
+########################
 
 
 class GameInformation:
@@ -49,9 +46,9 @@ class Game:
         self.display = Display(WIDTH, HEIGHT, BACKGROUND_COLOR)
         self.ball = Ball(WIDTH // 2, HEIGHT // 2)
         self.left_paddle = Paddle(right_paddle_x, right_paddle_y, PADDLE_WIDTH,
-                                  PADDLE_HEIGHT, self.left_paddle.speed)
+                                  PADDLE_HEIGHT, self.left_paddle_speed)
         self.right_paddle = Paddle(left_paddle_x, left_paddle_y, PADDLE_WIDTH,
-                                   PADDLE_HEIGHT, self.right_paddle.speed)
+                                   PADDLE_HEIGHT, self.right_paddle_speed)
         self.right_score = 0
         self.right_hits = 0
         self.left_score = 0
@@ -64,10 +61,10 @@ class Game:
         else:
             self.player_max_points = MAX_POINTS
         if self.game_mode == HARD:
-            self.right_paddle.speed = 7
+            self.right_paddle_speed = 7
         else:
-            self.right_paddle.speed = 10
-        self.left_paddle.speed = 10
+            self.right_paddle_speed = 10
+        self.left_paddle_speed = 10
 
     def draw_all(self):
         self.display.draw_screen(self.display.screen, BG)
@@ -80,24 +77,6 @@ class Game:
         if self.game_over:
             self.end_game()
         pygame.display.update()
-
-    # def paddle_movement(self):
-    #     keys = pygame.key.get_pressed()
-    #
-    #     if len(keys) > 0:
-    #         if keys[pygame.K_UP] and self.right_paddle.y - self.right_paddle.SPEED > 0:
-    #             self.right_paddle.move()
-    #             return True
-    #         if keys[pygame.K_DOWN] and self.right_paddle.y + self.right_paddle.height + self.right_paddle.SPEED < HEIGHT:
-    #             self.right_paddle.move(up=False)
-    #             return True
-    #         if keys[pygame.K_w] and self.left_paddle.y - self.left_paddle.SPEED > 0:
-    #             self.left_paddle.move()
-    #             return True
-    #         if keys[pygame.K_s] and self.left_paddle.y + self.left_paddle.height + self.left_paddle.SPEED < HEIGHT:
-    #             self.left_paddle.move(up=False)
-    #             return True
-    #         return False
 
     def move_paddle(self, left=True, up=True):
         """
@@ -159,8 +138,14 @@ class Game:
             self.left_score += 1
             self.start_new_round()
 
-        if (self.left_score or self.right_score) == MAX_POINTS:
+        if self.left_score == MAX_POINTS or self.right_score == self.player_max_points:
             self.game_over = True
+
+
+        elif self.ball.x >= WIDTH:
+            self.left_score += 1
+            self.start_new_round()
+
 
     def render_game(self):
         # self.move_paddle()
@@ -172,9 +157,7 @@ class Game:
             self.right_hits += 1
 
         self.ball_wall_collision()
-        # game_info = GameInformation(
-        #     self.left_hits, self.right_hits, self.left_score, self.right_score)
-        # return game_info
+
 
     def start_new_round(self):
         self.ball.y_speed = random.choice([-2.3, 2.3])
@@ -199,26 +182,3 @@ class Game:
         self.right_score = 0
         self.left_score = 0
         self.left_hits = self.right_hits = 0
-
-# def main():
-#     running = True
-#     clock = pygame.time.Clock()
-#     game = Game()
-#
-#     while running:
-#         clock.tick(60)
-#         game.draw_all()
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 running = False
-#
-#         if not game.game_over:
-#             game.render_game()
-#         else:
-#             pygame.time.delay(5000)
-#             game.new_game()
-#     pygame.quit()
-#
-#
-# if __name__ == '__main__':
-#     main()

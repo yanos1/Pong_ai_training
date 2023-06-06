@@ -1,22 +1,19 @@
-WHITE = (255,255,255)
-PEDAL_SPEED = 50
 
 
 class Paddle:
-    COLOR = WHITE
-    SPEED = PEDAL_SPEED
 
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height,speed):
         self.x = self.starting_x = x
         self.y = self.starting_y = y
         self.width = width
         self.height = height
+        self.speed = speed
 
     def draw_paddle(self, window,image):
         window.blit(image, (self.x, self.y, self.width, self.height))
 
     def move(self, up=True):
         if up:
-            self.y -= self.SPEED
+            self.y -= self.speed
         else:
-            self.y += self.SPEED
+            self.y += self.speed

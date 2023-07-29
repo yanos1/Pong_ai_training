@@ -19,11 +19,11 @@ def load_enemy(game_mode):
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
                              config_path)
     if game_mode == EASY:
-        play_ai(config,EASY,"easiest_mode.pickle")
+        play_ai(config, EASY, "Neuron_networks/easiest_mode.pickle")
     if game_mode == HARD:
-        play_ai(config,EASY,"hard_mode.pickle")
+        play_ai(config, EASY, "Neuron_networks/hard_mode.pickle")
     if game_mode == IMPOSSIBLE:
-        play_ai(config,EASY,"best.pickle")
+        play_ai(config, EASY, "Neuron_networks/best.pickle")
 
 
 def valid_mouse_click(button_pos, mouse_pos):

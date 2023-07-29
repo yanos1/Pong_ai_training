@@ -1,7 +1,6 @@
 import pygame
 from pong import Game
 import neat
-import os
 import pickle
 
 
@@ -108,7 +107,7 @@ def run_neat(config):
     p.add_reporter(neat.Checkpointer(1))
 
     winner = p.run(eval_genomes,1)
-    with open("easiest_mode.pickle", "wb") as f:
+    with open("Neuron_networks/easiest_mode.pickle", "wb") as f:
         pickle.dump(winner, f)
         print("made it")
 

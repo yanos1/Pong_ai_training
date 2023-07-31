@@ -21,12 +21,14 @@ impossible_mode_button_image = pygame.image.load("Assets/impossible_mode_button.
 easy_mode_text = BUTTON_FONT.render("Easy Mode", True, PINK)
 hard_mode_text = BUTTON_FONT.render("Hard Mode", True, PINK)
 impossible_mode_text = BUTTON_FONT.render("Impossible Mode", True,PINK)
+
+# button text locations #
+
 impossible_but_text_loc = (13,13)
 hard_but_text_loc = (32,13)
 easy_but_text_loc = (32,13)
 
-
-# button text locations #
+##########################
 
 
 class Display:
@@ -70,7 +72,7 @@ class Display:
 
     def draw_winner(self, window, winner):
         winner_text = self.score_font.render(f"{winner} wins!", True, self.color)
-        window.blit(winner_text, (self.width // 2.8, self.height // 2 - self.height // 8))
+        window.blit(winner_text, (self.width // 2.8, self.height // 2 - self.height // 8))  # Center of screen
 
     def start_menu_ball_animation(self,start_ball):
         if start_ball.y <= 0:

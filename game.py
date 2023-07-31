@@ -6,7 +6,7 @@ from pedals import Paddle
 
 pygame.init()
 
-#  game settings ##
+##  game settings ##
 WIDTH = 830
 HEIGHT = 550
 BG = pygame.transform.scale(BG_IMAGE, (WIDTH, HEIGHT))
@@ -32,6 +32,9 @@ IMPOSSIBLE = "impossible"
 
 
 class GameInformation:
+    """
+    This class will be used to track down relevant information for the network to take in.
+    """
     def __init__(self, left_hits, right_hits, left_score, right_score):
         self.left_hits = left_hits
         self.right_hits = right_hits
@@ -40,11 +43,14 @@ class GameInformation:
 
 
 class Game:
+    """
+    This class is in charge of game logic and game flow
+    """
     def __init__(self, game_mode):
         self.game_mode = game_mode
         self.set_game_settings()  # alter peddle speed, and max points needed to win.
-        self.display = Display(WIDTH, HEIGHT, BACKGROUND_COLOR)
-        self.ball = Ball(WIDTH // 2, HEIGHT // 2)
+        self.display = Display(WIDTH, HEIGHT, BACKGROUND_COLOR) # Display object
+        self.ball = Ball(WIDTH // 2, HEIGHT // 2)  # Ball object
         self.left_paddle = Paddle(right_paddle_x, right_paddle_y, PADDLE_WIDTH,
                                   PADDLE_HEIGHT, self.left_paddle_speed)
         self.right_paddle = Paddle(left_paddle_x, left_paddle_y, PADDLE_WIDTH,
@@ -56,6 +62,9 @@ class Game:
         self.game_over = False
 
     def set_game_settings(self):
+        """
+        alters the settings based on the level chosen by the user
+        """
         if self.game_mode == IMPOSSIBLE:
             self.player_max_points = 1  # in impossible mode, human only need 1 point to win.
         else:
@@ -67,6 +76,10 @@ class Game:
         self.left_paddle_speed = 10
 
     def draw_all(self):
+        """
+        using the Display object to draw the game
+        :return:
+        """
         self.display.draw_screen(self.display.screen, BG)
         self.display.draw_score(self.display.screen, self.left_score,
                                 self.right_score)
@@ -101,6 +114,10 @@ class Game:
         return True
 
     def ball_peddle_collision(self):
+        """
+        This function will detect ball-paddle collision.
+        :return: "left" if the left peddle hit the ball, "right" if the right peddle hit the ball
+        """
         if self.right_paddle.x + 1 == self.ball.x + (
                 BALL_SIZE // 2):
             if self.right_paddle.y <= self.ball.y <= self.right_paddle.y + PADDLE_HEIGHT + 5:  # ball touches paddle
@@ -114,6 +131,10 @@ class Game:
                 return "left"
 
     def handle_paddle_collision(self, paddle):
+        """
+        This function changes ball trajectory based on collisions with a paddle.
+        :param paddle: the paddle which hit the ball
+        """
         middle = (paddle.y + paddle.y + PADDLE_HEIGHT) // 2
         dist_difference = self.ball.y - middle
         if dist_difference >= 0:
@@ -126,6 +147,10 @@ class Game:
         # changing the the direction of the ball when hitting things
 
     def ball_wall_collision(self):
+        """
+        this function changes ball trajectory based on collision with a wall.
+        if it is one of the players wall, then a point is given and the game resets.
+        """
         if self.ball.y <= 0:
             self.ball.y_speed *= -1
         elif self.ball.y >= HEIGHT:
@@ -141,14 +166,16 @@ class Game:
         if self.left_score == MAX_POINTS or self.right_score == self.player_max_points:
             self.game_over = True
 
-
         elif self.ball.x >= WIDTH:
             self.left_score += 1
             self.start_new_round()
 
 
-    def render_game(self):
-        # self.move_paddle()
+    def move_ball_and_detect_collision(self):
+        """
+        initiating ball movement and checking ball-paddle collision using an earlier function
+        :return:
+        """
         self.ball.move_ball()
         hit = self.ball_peddle_collision()
         if hit == "left":
@@ -160,7 +187,7 @@ class Game:
 
 
     def start_new_round(self):
-        self.ball.y_speed = random.choice([-2.3, 2.3])
+        self.ball.y_speed = random.choice([-2.3, 2.3])  # ball will not move straight with this line when the round starts.
         self.ball.x_speed *= -1
         self.ball.x = self.ball.starting_x
         self.ball.y = self.ball.starting_y
@@ -170,6 +197,9 @@ class Game:
         self.left_paddle.y = self.left_paddle.starting_y
 
     def end_game(self):
+        """
+        checking whether a player won.
+        """
         if self.right_score == MAX_POINTS:
 
             self.display.draw_winner(self.display.screen, "Right")

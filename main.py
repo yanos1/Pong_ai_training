@@ -2,8 +2,9 @@ import pygame
 import neat
 import os
 from trainAI import play_ai
-from pong import WIDTH, HEIGHT, WHITE
-from display import Display, easy_mode_button_image, hard_mode_button_image, impossible_mode_button_image, BG_IMAGE, TITLE_IMAGE,BALL_IMAGE
+from game import WIDTH, HEIGHT, WHITE
+from display import Display, easy_mode_button_image, hard_mode_button_image, impossible_mode_button_image, BG_IMAGE, \
+    TITLE_IMAGE, BALL_IMAGE
 from ball import Ball
 
 EASY = "easy"
@@ -11,13 +12,17 @@ HARD = "hard"
 IMPOSSIBLE = "impossible"
 
 
-
 def load_enemy(game_mode):
+    """
+    taking in a game mode and returning the right network for the game based on the game mode.
+    :param game_mode: a game mode (easy, hard, impossible).
+    :return: the compatible network for the game mode.
+    """
     local_dir = os.path.dirname(__file__)
     config_path = os.path.join(local_dir, "config.txt")
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                          neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                             config_path)
+                         config_path)  # can remove config since training is done.
     if game_mode == EASY:
         play_ai(config, EASY, "Neuron_networks/easiest_mode.pickle")
     if game_mode == HARD:
@@ -27,6 +32,12 @@ def load_enemy(game_mode):
 
 
 def valid_mouse_click(button_pos, mouse_pos):
+    """
+    making sure we click within the given button
+    :param button_pos: the position of the button.
+    :param mouse_pos: the position of the mouse
+    :return: True if the positions coincide, False otherwise.
+    """
     if button_pos[0] <= mouse_pos[0] <= button_pos[0] + 150 and \
             button_pos[1] <= mouse_pos[1] <= button_pos[1] + 44:
         return True
@@ -34,9 +45,14 @@ def valid_mouse_click(button_pos, mouse_pos):
 
 
 def start_game():
+    """
+    This is the game start display, it will draw the start screen and buttons,
+     waiting for a valid click to start the game.
+    :return: the game mode being chosen
+    """
     run = True
     start_display = Display(WIDTH, HEIGHT, WHITE)
-    start_ball = Ball(WIDTH//2,HEIGHT//2)
+    start_ball = Ball(WIDTH // 2, HEIGHT // 2)
     clock = pygame.time.Clock()
     while run:
         clock.tick(60)
@@ -44,7 +60,7 @@ def start_game():
         start_display.draw_title(start_display.screen, TITLE_IMAGE)
         start_display.draw_buttons(start_display.screen, easy_mode_button_image, hard_mode_button_image,
                                    impossible_mode_button_image)
-        start_ball.draw_ball(start_display.screen,BALL_IMAGE)
+        start_ball.draw_ball(start_display.screen, BALL_IMAGE)
         start_ball.move_ball()
         start_display.start_menu_ball_animation(start_ball)
 
